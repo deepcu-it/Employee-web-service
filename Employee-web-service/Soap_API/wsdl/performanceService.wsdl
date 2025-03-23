@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/performance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/performance">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/performance">
+      <xsd:element name="GetMyPerformanceReviewRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="userId" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="GetMyPerformanceReviewResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="review" type="xsd:string"/>
+            <xsd:element name="rating" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="GetMyPerformanceReviewRequestMessage">
+    <part name="parameters" element="tns:GetMyPerformanceReviewRequest"/>
+  </message>
+  <message name="GetMyPerformanceReviewResponseMessage">
+    <part name="parameters" element="tns:GetMyPerformanceReviewResponse"/>
+  </message>
+
+  <portType name="PerformanceServicePort">
+    <operation name="GetMyPerformanceReview">
+      <input message="tns:GetMyPerformanceReviewRequestMessage"/>
+      <output message="tns:GetMyPerformanceReviewResponseMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="PerformanceServiceBinding" type="tns:PerformanceServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetMyPerformanceReview">
+      <soap:operation soapAction="http://example.com/performance/GetMyPerformanceReview"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="PerformanceService">
+    <port name="PerformanceServicePort" binding="tns:PerformanceServiceBinding">
+      <soap:address location="http://localhost:5000/soap"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/attendance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/attendance">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/attendance">
+      <xsd:element name="CheckInRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="userId" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="CheckInResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="message" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="CheckInRequestMessage">
+    <part name="parameters" element="tns:CheckInRequest"/>
+  </message>
+  <message name="CheckInResponseMessage">
+    <part name="parameters" element="tns:CheckInResponse"/>
+  </message>
+
+  <portType name="AttendanceServicePort">
+    <operation name="CheckIn">
+      <input message="tns:CheckInRequestMessage"/>
+      <output message="tns:CheckInResponseMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="AttendanceServiceBinding" type="tns:AttendanceServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CheckIn">
+      <soap:operation soapAction="http://example.com/attendance/CheckIn"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="AttendanceService">
+    <port name="AttendanceServicePort" binding="tns:AttendanceServiceBinding">
+      <soap:address location="http://localhost:5000/soap"/>
+    </port>
+  </service>
+</definitions>

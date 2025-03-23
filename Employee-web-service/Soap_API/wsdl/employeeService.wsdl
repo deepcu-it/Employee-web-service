@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/employees" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/employees">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/employees">
+      <xsd:element name="RegisterRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="email" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="role" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="RegisterResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="message" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="RegisterRequestMessage">
+    <part name="parameters" element="tns:RegisterRequest"/>
+  </message>
+  <message name="RegisterResponseMessage">
+    <part name="parameters" element="tns:RegisterResponse"/>
+  </message>
+
+  <portType name="EmployeeServicePort">
+    <operation name="Register">
+      <input message="tns:RegisterRequestMessage"/>
+      <output message="tns:RegisterResponseMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="EmployeeServiceBinding" type="tns:EmployeeServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Register">
+      <soap:operation soapAction="http://example.com/employees/Register"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="EmployeeService">
+    <port name="EmployeeServicePort" binding="tns:EmployeeServiceBinding">
+      <soap:address location="http://localhost:5000/soap"/>
+    </port>
+  </service>
+</definitions>

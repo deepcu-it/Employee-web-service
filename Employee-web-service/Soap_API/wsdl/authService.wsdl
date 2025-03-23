@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/auth" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://example.com/auth">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/auth">
+      <xsd:element name="LoginRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="email" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="LoginResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="LoginRequestMessage">
+    <part name="parameters" element="tns:LoginRequest"/>
+  </message>
+  <message name="LoginResponseMessage">
+    <part name="parameters" element="tns:LoginResponse"/>
+  </message>
+
+  <portType name="AuthServicePort">
+    <operation name="Login">
+      <input message="tns:LoginRequestMessage"/>
+      <output message="tns:LoginResponseMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="AuthServiceBinding" type="tns:AuthServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Login">
+      <soap:operation soapAction="http://example.com/auth/Login"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="AuthService">
+    <port name="AuthServicePort" binding="tns:AuthServiceBinding">
+      <soap:address location="http://localhost:5000/soap"/>
+    </port>
+  </service>
+</definitions>
