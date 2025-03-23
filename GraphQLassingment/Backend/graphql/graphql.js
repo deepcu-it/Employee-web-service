@@ -1,15 +1,36 @@
-
 import { ApolloServer } from "@apollo/server";
-import axios from "axios";
-import { typeDefs as ApolloServerSchema } from "./schema/schema.js";
-import { resolvers } from "./resolvers/resolvers.js";
+import { getAllBooks, getBookById } from "../resolvers/bookResolvers.js";
+import { getAllUsers, getUserById } from "../resolvers/userResolvers.js";
 
-export const connectGraphQL = () => {
-    const server = new ApolloServer({
-        typeDefs: ApolloServerSchema,
-        resolvers: resolvers,
-    });
+const server = new ApolloServer({
+    typeDefs: `
+    type Book {
+      id: ID!
+      title: String!
+      author: String!
+      publishedYear: Int
+    }
+    type User {
+      id: ID!
+      name: String!
+      email: String!
+      phone: String
+    }
+    type Query {
+      getAllBooks: [Book]
+      getBookById(id: ID!): Book
+      getAllUsers: [User]
+      getUserById(id: ID!): User
+    }
+  `,
+    resolvers: {
+        Query: {
+            getAllBooks: () => getAllBooks(),
+            getBookById: (_, { id }) => getBookById(id),
+            getAllUsers: () => getAllUsers(),
+            getUserById: (_, { id }) => getUserById(id),
+        },
+    }
+});
 
-    return server;
-};
-
+export default server;
