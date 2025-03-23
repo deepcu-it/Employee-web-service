@@ -1,43 +1,24 @@
-export const ApolloServerSchema = `#graphql
-type Todo {
+// graphql/typeDefs.js
+import { gql } from 'apollo-server-express';
+
+export const typeDefs = gql`
+  type Book {
     id: ID!
-    user: User
-    text: String!
-    completed: Boolean!
-}
-type Geo {
-  lat: String
-  lng: String
-}
+    title: String!
+    author: String!
+    publishedDate: String!
+    isbn: String!
+    availableCopies: Int!
+  }
 
-type Address {
-  street: String
-  suite: String
-  city: String
-  zipcode: String
-  geo: Geo
-}
+  type Query {
+    getBooks: [Book]
+    getBook(id: ID!): Book
+  }
 
-type Company {
-  name: String
-  catchPhrase: String
-  bs: String
-}
-
-type User {
-  id: ID!
-  name: String!
-  username: String!
-  email: String!
-  address: Address!
-  phone: String!
-  website: String!
-  company: Company!
-}
-
-type Query {
-    getTodos: [Todo]
-    getAllUsers: [User]
-    getUserById(id: ID!): User
-}
+  type Mutation {
+    addBook(title: String!, author: String!, publishedDate: String!, isbn: String!, availableCopies: Int!): Book
+    updateBook(id: ID!, title: String, author: String, publishedDate: String, isbn: String, availableCopies: Int): Book
+    deleteBook(id: ID!): Book
+  }
 `;

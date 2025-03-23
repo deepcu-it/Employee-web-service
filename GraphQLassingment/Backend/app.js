@@ -13,11 +13,12 @@ dotenv.config({ path: './.env', });
 export const envMode = process.env.NODE_ENV?.trim() || 'DEVELOPMENT';
 const port = process.env.PORT || 3000;
 
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const mongoURI = process.env.MONGO_URI;
 
 connectDB(mongoURI);
 
 const app = express();
+app.use(cors({ origin: ' * ', credentials: true }));
 
 const graphqlServer = connectGraphQL();
 await graphqlServer.start();
@@ -33,31 +34,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/graphql", expressMiddleware(graphqlServer));
-app.use(cors({ origin: ' * ', credentials: true }));
 
 
-app.get('/demo', (req, res) => {
-  res.status(200).send([
-    {
-      id: "1",
-      title: "Todo 1",
-      description: "Description 1",
-      completed: false
-    },
-    {
-      id: "2",
-      title: "Todo 2",
-      description: "Description 2",
-      completed: true
-    },
-    {
-      id: "3",
-      title: "Todo 3",
-      description: "Description 3",
-      completed: false
-    },
-  ])
-});
 
 // your routes here
 
